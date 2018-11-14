@@ -1,3 +1,4 @@
+package edu.upc.eetac.dsa;
 
 import java.util.*;
 
@@ -9,7 +10,7 @@ public class ProductManagerImpl implements ProductManager {
 
     protected ArrayList<Producto> productos;
     protected Queue<Pedido> pedidos;
-    //HashMap(key: string; value: Usuario)
+    //HashMap(key: string; value: edu.upc.eetac.dsa.Usuario)
     protected HashMap<String, Usuario> usuarios;
 
     private ProductManagerImpl(){
@@ -47,7 +48,6 @@ public class ProductManagerImpl implements ProductManager {
         return p;
     }
 
-    //log implementado
     public LinkedList<Pedido> getPedidos(String user) throws UserNotFoundException {
         //Creamos un lista de pedidos para el resultado
         //************
@@ -94,12 +94,11 @@ public class ProductManagerImpl implements ProductManager {
         return p;
     }
 
-    //log implementado
     public void hacerPedido(String user, Pedido p) throws UserNotFoundException {
         //Buscamos el usuario
         Usuario u = this.usuarios.get(user);
         //****
-        //log.info("Usuario" + u + "Pedido" + p);
+        //log.info("edu.upc.eetac.dsa.Usuario" + u + "edu.upc.eetac.dsa.Pedido" + p);
         //****
         if(u!=null){
             //nos guardamos el usuario en el pedio
@@ -113,13 +112,12 @@ public class ProductManagerImpl implements ProductManager {
             throw new UserNotFoundException();
         }
         //****
-        //log.info("Pedido añadido:" this.pedidos);
+        //log.info("edu.upc.eetac.dsa.Pedido añadido:" this.pedidos);
         //****
 
     }
 
-
-    public void servirPedido(){
+    public Pedido servirPedido(){
 
         Pedido p = this.pedidos.remove();
         //****
@@ -136,8 +134,8 @@ public class ProductManagerImpl implements ProductManager {
          u.addPedido(p);
          //****
         //log.info("Pedidos usuario:" + u
-        //****
 
+        return p;
     }
 
     private Producto getProducto(String nProducto){
@@ -149,8 +147,17 @@ public class ProductManagerImpl implements ProductManager {
                 encontrado = true;
             }
         }
+        if (!encontrado){
+            productos.add(new Producto(5, nProducto));
+        }
         return this.productos.get(i);
     }
+
+    public void addUsuario(String u){
+        usuarios.put(u,new Usuario(u));
+    }
+
+    public void addProducto(Producto p){ productos.add(p);}
 
 
 

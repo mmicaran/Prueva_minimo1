@@ -1,4 +1,4 @@
-
+package edu.upc.eetac.dsa;
 
 public class Producto {
 
@@ -6,10 +6,10 @@ public class Producto {
     String nombre;
     int ventas;
 
-    public Producto(double precio, String nombre, int ventas){
+    public Producto(double precio, String nombre){
         this.nombre = nombre;
         this.precio = precio;
-        this.ventas = ventas;
+        this.ventas = 0;
     }
 
     public double getPrecio() {

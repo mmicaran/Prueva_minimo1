@@ -1,3 +1,5 @@
+package edu.upc.eetac.dsa;
+
 import java.util.LinkedList;
 
 public class Usuario {
@@ -5,8 +7,8 @@ public class Usuario {
 
     LinkedList<Pedido> pedidos;
 
-    public Usuario(String nombre, LinkedList<Pedido> pedidos){
-        this.pedidos = pedidos;
+    public Usuario(String nombre){
+        this.pedidos = new LinkedList<Pedido>();
         this.nombre = nombre;
     }
 
