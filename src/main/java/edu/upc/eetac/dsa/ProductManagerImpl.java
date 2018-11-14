@@ -1,9 +1,12 @@
 package edu.upc.eetac.dsa;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 public class ProductManagerImpl implements ProductManager {
 
+    final static Logger log = Logger.getLogger(ProductManagerImpl.class.getName());
 
     //SINGELTON
     private static ProductManagerImpl instance;
@@ -31,9 +34,8 @@ public class ProductManagerImpl implements ProductManager {
         //Copia de la lista para ordenarla
         List<Producto> p = this.productos;
         p.addAll(this.productos);
-        //****
-        //log.info("Lista desordenada" + this.productos);
-        //****
+        log.info("Lista desordenada" + this.productos);
+
         //Indicamos que comparamos
         Collections.sort(p, new Comparator<Producto>() {
             @Override
@@ -42,17 +44,15 @@ public class ProductManagerImpl implements ProductManager {
                 return (int)(o1.getPrecio()-o2.getPrecio());
             }
         });
-        //****
-        //log.info("Lista ordenada" + this.p);
-        //****
+
+        log.info("Lista ordenada" + p);
+
         return p;
     }
 
     public LinkedList<Pedido> getPedidos(String user) throws UserNotFoundException {
         //Creamos un lista de pedidos para el resultado
-        //************
-        //log.info("user" +user);
-        //************
+        log.info("user" +user);
         LinkedList<Pedido> pedidos = null;
 
         //Obtenemos el objeto User a partir de la clave user en el HM usuarios
@@ -62,16 +62,10 @@ public class ProductManagerImpl implements ProductManager {
             pedidos = User.getPedidos();
         }
         else{
-            //***
-            //log.error("user not found");
-            //***
-
+            log.error("user not found");
             throw new UserNotFoundException();
         }
-
-        //****
-        //log.info("pedidos" +pedidos);
-        //****
+        log.info("pedidos" +pedidos);
 
         return pedidos;
 
@@ -82,6 +76,8 @@ public class ProductManagerImpl implements ProductManager {
         List<Producto> p = this.productos;
         p.addAll(this.productos);
 
+        log.info("lista desordenada: " + p);
+
         //Indicamos que comparamos
         Collections.sort(p, new Comparator<Producto>() {
             @Override
@@ -90,39 +86,33 @@ public class ProductManagerImpl implements ProductManager {
                 return (-1)*(o1.getVentas()-o2.getVentas());
             }
         });
-
+        log.info("lista ordenada: " + p);
         return p;
     }
 
     public void hacerPedido(String user, Pedido p) throws UserNotFoundException {
         //Buscamos el usuario
         Usuario u = this.usuarios.get(user);
-        //****
-        //log.info("edu.upc.eetac.dsa.Usuario" + u + "edu.upc.eetac.dsa.Pedido" + p);
-        //****
+        log.info("Usuario" + u + "Pedido" + p);
+
         if(u!=null){
             //nos guardamos el usuario en el pedio
             p.setUser(user);
             pedidos.add(p);
         }
         else{
-            //***
-            //log.error("user not found");
-            //***
+            log.error("user not found");
             throw new UserNotFoundException();
         }
-        //****
-        //log.info("edu.upc.eetac.dsa.Pedido añadido:" this.pedidos);
-        //****
-
+        log.info("Pedido añadido:" + this.pedidos);
     }
 
     public Pedido servirPedido(){
 
         Pedido p = this.pedidos.remove();
-        //****
-        //log.info("Pedidos atendido:" + p);
-        //****
+
+        log.info("Pedidos atendido:" + p);
+
          for (LP lp: p.getProductos()) {
             int q = lp.getQ();
             String nProducto = lp.getProducto();
@@ -132,9 +122,8 @@ public class ProductManagerImpl implements ProductManager {
          String user = p.getUser();
          Usuario u = this.usuarios.get(user);
          u.addPedido(p);
-         //****
-        //log.info("Pedidos usuario:" + u
 
+         log.info("Pedidos usuario:" + u.pedidos);
         return p;
     }
 

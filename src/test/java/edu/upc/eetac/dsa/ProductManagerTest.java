@@ -1,21 +1,27 @@
 package edu.upc.eetac.dsa;
 
 import edu.upc.eetac.dsa.*;
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ProductManagerTest {
 
-    ProductManager pm;
+    final static Logger log = Logger.getLogger(ProductManagerTest.class.getName());
+    static ProductManager pm;
 
-    Producto producto1, producto2, producto3;
-    Pedido p1, p2, p3;
+    static Producto producto1, producto2, producto3, producto4;
+    static Pedido p1, p2, p3;
 
     @BeforeClass
-    public void setUp() {
+    public static void setUp() {
         //Inicimos una instancia
-        this.pm = ProductManagerImpl.getInstance();
+        pm = ProductManagerImpl.getInstance();
         //Antes de empezar inicimaos usuarios
         pm.addUsuario("Maria");
         pm.addUsuario("Pepe");
@@ -24,55 +30,73 @@ public class ProductManagerTest {
         producto1 = new Producto(1.5, "zumo");
         producto2 = new Producto(0.8,"cafe");
         producto3 = new Producto(1, "croasant");
+        producto4 = new Producto(3.5, "bocata");
         pm.addProducto(producto1);
         pm.addProducto(producto2);
         pm.addProducto(producto3);
-
+        p1 =  new Pedido();
+        p2 = new Pedido();
 
     }
 
+    @AfterClass
+    public static void tearDown(){
+        pm = null;
+    }
 
+    //Probamos la funcion hacer pedido y servir
+    @Test
+    public void testPedido() {
+        p1.addProducto(2, "cafe");
+        p1.addProducto(1, "bocata");
 
+        try {
+            this.pm.hacerPedido("Maria", p1);
+        } catch (UserNotFoundException e) {
+            log.error("Usuario no encontrado");
+        }
+
+        p2.addProducto(4, "zumo");
+        p2.addProducto(3, "croasant");
+
+        try {
+            this.pm.hacerPedido("Pepe", p2);
+        }catch (UserNotFoundException e) {
+            log.error("Usuario no encontrado");
+        }
+        Pedido p = pm.servirPedido();
+        Assert.assertEquals("Maria", p.getUser());
+
+        Pedido r = pm.servirPedido();
+        Assert.assertEquals("Pepe", r.getUser());
+    }
 
     @Test
-    public void testHacerPedido() {
-        Pedido p1 = new Pedido();
-        p1.add(2, "cafe");
-        p1.add(1, "bocata");
+    public void getAllProductosPorPrecioASC(){
+        List<Producto> p = pm.getAllProductosPorPrecioASC();
 
+        Assert.assertEquals(p.get(0).nombre, "bocata", "bocata");
+        Assert.assertEquals(p.get(1).nombre, "zumo", "zumo");
+        Assert.assertEquals(p.get(2).nombre, "croasant", "croasant");
+        Assert.assertEquals(p.get(3).nombre, "cafe", "cafe");
+    }
+
+    @Test
+    public void getAllProductosPorVentasDES(){
+        List<Producto> p = pm.getAllProductosPorVentasDES();
+
+        Assert.assertEquals(p.get(0).nombre, "bocata", "bocata");
+        Assert.assertEquals(p.get(0).nombre, "cafe", "cafe");
+        Assert.assertEquals(p.get(0).nombre, "croasant", "croasant");
+        Assert.assertEquals(p.get(0).nombre, "zumo", "zumo");
+    }
+
+    @Test
+    public void getPedidos(){
         try {
-            this.pm.hacerPedido("maria", p1);
+            LinkedList<Pedido> lp = pm.getPedidos("Maria");
         } catch (UserNotFoundException e) {
-            e.printStackTrace();
+            log.error("Usuario no encontrado");
         }
-
-
-        /*edu.upc.eetac.dsa.Pedido p2 = new edu.upc.eetac.dsa.Pedido();
-        p2.add(2, "zumo");
-        p2.add(1, "bocata2");
-
-        try {
-            this.pm.hacerPedido("pepe", p2);
-        }catch (edu.upc.eetac.dsa.UserNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        edu.upc.eetac.dsa.Pedido p3 = new edu.upc.eetac.dsa.Pedido();
-        p3.add(2, "colaco");
-        p3.add(1, "crusan");
-
-        try {
-            this.pm.hacerPedido("juam", p3);
-        } catch (edu.upc.eetac.dsa.UserNotFoundException e) {
-            e.printStackTrace();
-        }*/
-
-
-        p1 = this.pm.servirPedido();
-        Assert.assertEquals("maria", p1.getUser());
-
-        /*p2 = this.pm.servirPedido();
-        Assert.assertEquals("pepe", p2.getUser());*/
-
     }
 }

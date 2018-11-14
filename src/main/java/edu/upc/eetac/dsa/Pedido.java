@@ -12,9 +12,10 @@ public class Pedido {
         this.lps = new LinkedList<LP>();
     }
 
-    public void add(int q, String prod) {
+    public void addProducto(int q, String prod) {
 
-        this.lps.add(new LP(prod, q));
+        LP lp = new LP(prod,q);
+        this.lps.add(lp);
     }
 
     public List<LP> getProductos() {
