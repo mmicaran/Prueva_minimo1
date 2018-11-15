@@ -7,6 +7,8 @@ public class Usuario {
 
     LinkedList<Pedido> pedidos;
 
+    public Usuario(){}
+
     public Usuario(String nombre){
         this.pedidos = new LinkedList<Pedido>();
         this.nombre = nombre;
@@ -30,5 +32,10 @@ public class Usuario {
 
     public LinkedList<Pedido> getPedidos() {
         return pedidos;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto [nombre=" + nombre + ", pedidos=" + pedidos +"]";
     }
 }

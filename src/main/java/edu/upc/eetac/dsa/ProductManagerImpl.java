@@ -30,9 +30,9 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     //IMPLEMENTACIÓN METODOS
-    public List<Producto> getAllProductosPorPrecioASC(){
+    public ArrayList<Producto> getAllProductosPorPrecioASC(){
         //Copia de la lista para ordenarla
-        List<Producto> p = this.productos;
+        ArrayList<Producto> p = new ArrayList<>();
         p.addAll(this.productos);
         log.info("Lista desordenada" + this.productos);
 
@@ -41,10 +41,15 @@ public class ProductManagerImpl implements ProductManager {
             @Override
             public int compare(Producto o1, Producto o2) {
                 //Ascendente
-                return (int)(o1.getPrecio()-o2.getPrecio());
+                double d = o1.getPrecio()-o2.getPrecio();
+                if(d < 0.0)
+                    return -1;
+                else if(d> 0.0)
+                    return 1;
+                else
+                    return 0;
             }
         });
-
         log.info("Lista ordenada" + p);
 
         return p;
@@ -52,8 +57,8 @@ public class ProductManagerImpl implements ProductManager {
 
     public LinkedList<Pedido> getPedidos(String user) throws UserNotFoundException {
         //Creamos un lista de pedidos para el resultado
-        log.info("user" +user);
-        LinkedList<Pedido> pedidos = null;
+        log.info("user: " + user);
+        LinkedList<Pedido> pedidos;
 
         //Obtenemos el objeto User a partir de la clave user en el HM usuarios
         Usuario User = this.usuarios.get(user);
@@ -65,8 +70,7 @@ public class ProductManagerImpl implements ProductManager {
             log.error("user not found");
             throw new UserNotFoundException();
         }
-        log.info("pedidos" +pedidos);
-
+        log.info("pedidos: " + pedidos);
         return pedidos;
 
     }
@@ -83,7 +87,13 @@ public class ProductManagerImpl implements ProductManager {
             @Override
             public int compare(Producto o1, Producto o2) {
                 //DESCENDENTE
-                return (-1)*(o1.getVentas()-o2.getVentas());
+                double d = o1.getVentas()-o2.getVentas();
+                if(d < 0.0)
+                    return 1;
+                else if(d> 0.0)
+                    return -1;
+                else
+                    return 0;
             }
         });
         log.info("lista ordenada: " + p);
@@ -127,26 +137,39 @@ public class ProductManagerImpl implements ProductManager {
         return p;
     }
 
-    private Producto getProducto(String nProducto){
+    private Producto getProducto(String nProducto) {
         boolean encontrado = false;
         Producto p;
         int i;
-        for(i=0; i<this.productos.size() && !encontrado; i++){
-            if(nProducto.equals(this.productos.get(i).nombre)){
+        for (i = 0; i < this.productos.size() && !encontrado; i++) {
+            if (nProducto.equals(this.productos.get(i).nombre)) {
                 encontrado = true;
             }
         }
-        if (!encontrado){
-            productos.add(new Producto(5, nProducto));
+        if (!encontrado) {
+            productos.add(new Producto(nProducto, 5));
+            return this.productos.get(i++);
+        } else {
+            return this.productos.get(i);
         }
-        return this.productos.get(i);
     }
 
     public void addUsuario(String u){
         usuarios.put(u,new Usuario(u));
     }
 
-    public void addProducto(Producto p){ productos.add(p);}
+    public void addProducto(Producto p){
+        boolean encontrado = false;
+        int i;
+        for (i = 0; (i < this.productos.size()) && (encontrado==false); i++) {
+            if (p.nombre.equals(this.productos.get(i).nombre)) {
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            productos.add(p);
+        }
+    }
 
 
 

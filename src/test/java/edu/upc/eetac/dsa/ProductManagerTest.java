@@ -7,8 +7,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ProductManagerTest {
 
@@ -27,13 +30,19 @@ public class ProductManagerTest {
         pm.addUsuario("Pepe");
         pm.addUsuario("Juan");
         //inicimaos productos
-        producto1 = new Producto(1.5, "zumo");
-        producto2 = new Producto(0.8,"cafe");
-        producto3 = new Producto(1, "croasant");
-        producto4 = new Producto(3.5, "bocata");
+        producto1 = new Producto( "zumo",1.5);
+        producto2 = new Producto("cafe",0.8);
+        producto3 = new Producto( "croasant",1);
+        producto4 = new Producto( "bocata",3.5);
+        producto1.ventas = 1;
+        producto4.ventas = 2;
+        producto2.ventas = 5;
+
         pm.addProducto(producto1);
         pm.addProducto(producto2);
         pm.addProducto(producto3);
+        pm.addProducto(producto4);
+
         p1 =  new Pedido();
         p2 = new Pedido();
 
@@ -65,38 +74,41 @@ public class ProductManagerTest {
             log.error("Usuario no encontrado");
         }
         Pedido p = pm.servirPedido();
-        Assert.assertEquals("Maria", p.getUser());
+        assertEquals("Maria", p.getUser());
 
         Pedido r = pm.servirPedido();
-        Assert.assertEquals("Pepe", r.getUser());
+        assertEquals("Pepe", r.getUser());
     }
 
     @Test
     public void getAllProductosPorPrecioASC(){
-        List<Producto> p = pm.getAllProductosPorPrecioASC();
+        ArrayList<Producto> p = pm.getAllProductosPorPrecioASC();
+        log.info("Lista ordenada test; "+ p);
 
-        Assert.assertEquals(p.get(0).nombre, "bocata", "bocata");
-        Assert.assertEquals(p.get(1).nombre, "zumo", "zumo");
-        Assert.assertEquals(p.get(2).nombre, "croasant", "croasant");
-        Assert.assertEquals(p.get(3).nombre, "cafe", "cafe");
+        assertEquals(p.get(3).nombre, "bocata", "bocata");
+        assertEquals(p.get(2).nombre, "zumo", "zumo");
+        assertEquals(p.get(1).nombre, "croasant", "croasant");
+        assertEquals(p.get(0).nombre, "cafe", "cafe");
     }
 
     @Test
     public void getAllProductosPorVentasDES(){
         List<Producto> p = pm.getAllProductosPorVentasDES();
 
-        Assert.assertEquals(p.get(0).nombre, "bocata", "bocata");
-        Assert.assertEquals(p.get(0).nombre, "cafe", "cafe");
-        Assert.assertEquals(p.get(0).nombre, "croasant", "croasant");
-        Assert.assertEquals(p.get(0).nombre, "zumo", "zumo");
+        assertEquals(p.get(1).nombre, "bocata", "bocata");
+        assertEquals(p.get(3).nombre, "cafe", "cafe");
+        assertEquals(p.get(1).nombre, "croasant", "croasant");
+        assertEquals(p.get(2).nombre, "zumo", "zumo");
     }
 
     @Test
     public void getPedidos(){
         try {
             LinkedList<Pedido> lp = pm.getPedidos("Maria");
+            log.info("Pedido: "+lp);
         } catch (UserNotFoundException e) {
             log.error("Usuario no encontrado");
         }
+
     }
 }

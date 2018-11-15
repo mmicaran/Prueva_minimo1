@@ -8,6 +8,7 @@ public class Pedido {
     List<LP> lps;
     String user;
 
+
     public Pedido (){
         this.lps = new LinkedList<LP>();
     }
@@ -32,6 +33,11 @@ public class Pedido {
 
     public String getUser() {
         return user;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto [LP=" + lps + ", Usuario=" + user + "]";
     }
 
 

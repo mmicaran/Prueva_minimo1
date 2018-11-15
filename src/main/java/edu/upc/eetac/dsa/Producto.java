@@ -2,11 +2,14 @@ package edu.upc.eetac.dsa;
 
 public class Producto {
 
-    double precio;
     String nombre;
+    double precio;
     int ventas;
 
-    public Producto(double precio, String nombre){
+    public Producto() {
+    }
+
+    public Producto(String nombre, double precio){
         this.nombre = nombre;
         this.precio = precio;
         this.ventas = 0;
@@ -40,6 +43,9 @@ public class Producto {
         this.ventas += q;
     }
 
-
+    @Override
+    public String toString() {
+        return "Producto [nombre=" + nombre + ", precio=" + precio +", ventas=" + ventas +"]";
+    }
 
 }

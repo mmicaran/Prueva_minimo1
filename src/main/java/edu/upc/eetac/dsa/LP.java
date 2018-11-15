@@ -5,6 +5,8 @@ public class LP {
     String producto;
     int q;
 
+    public LP(){}
+
     public LP (String p , int q) {
         this.producto=p;
         this.q=q;
@@ -24,5 +26,10 @@ public class LP {
 
     public String getProducto() {
         return producto;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto [nombre=" + producto + ", cantidad=" + q +"]";
     }
 }
